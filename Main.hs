@@ -23,10 +23,8 @@ main = do
 
 inputLoop :: TVar AppState -> IO ()
 inputLoop state = do
-    putStr "Set a new label: "
-    l <- getLine
-    putStr $ "Set a new " <> l <> ": "
-    content <- getLine
+    l <- prompt "Set a new label"
+    content <- prompt $ "Set a new " <> l
     now <- getCurrentTime
     atomically $
         modifyTVar'
@@ -34,3 +32,8 @@ inputLoop state = do
             (\s ->
                  AppState $
                  Status (fromString l) now (fromString content) : status s)
+
+prompt :: String -> IO String
+prompt p = do
+    putStr $ p <> ": "
+    getLine
