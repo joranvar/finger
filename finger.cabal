@@ -17,7 +17,8 @@ cabal-version:       >=1.10
 
 executable finger
   main-is:             Main.hs
-  -- other-modules:
+  other-modules:       Types
+                     , Web
   -- other-extensions:
   build-depends:       base >=4.10 && <4.11
                      , aeson

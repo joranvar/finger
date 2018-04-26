@@ -4,7 +4,7 @@ let
   finger = pkgs.haskellPackages.callCabal2nix "finger" (pkgs.stdenv.mkDerivation rec {
   name = "finger-src";
   cabal = ../finger.cabal;
-  srcs = [ ../LICENSE ../Main.hs ];
+  srcs = [ ../LICENSE ../Main.hs ../Types.hs ../Web.hs ];
   phases = ["unpackPhase"];
   unpackPhase = ''
     set -Eux
