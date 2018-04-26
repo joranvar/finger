@@ -3,7 +3,7 @@ module Main
     ( main
     ) where
 
-import Control.Concurrent (forkIO)
+import Control.Concurrent (forkIO, yield)
 import Control.Concurrent.STM (TVar, atomically, modifyTVar', newTVarIO)
 import Control.Monad (forever)
 import Data.Monoid ((<>))
@@ -20,6 +20,7 @@ main = do
     hSetBuffering stdout NoBuffering
     state <- newTVarIO $ AppState []
     _ <- forkIO $ startFingerServer state
+    yield
     forever $ inputLoop state
 
 inputLoop :: TVar AppState -> IO ()
