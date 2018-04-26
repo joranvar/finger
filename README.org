@@ -1,0 +1,6 @@
+#+TITLE: Running this on nix
+
+Run the following in the root of the project:
+#+BEGIN_SRC shell
+$(nix-build nix)/bin/finger
+#+END_SRC
