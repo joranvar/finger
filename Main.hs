@@ -7,8 +7,9 @@ import Control.Concurrent (forkIO)
 import Control.Concurrent.STM (TVar, atomically, modifyTVar', newTVarIO)
 import Control.Monad (forever)
 import Data.Monoid ((<>))
+import Data.Text.Lazy (Text)
+import Data.Text.Lazy.IO as TIO (putStr, getLine)
 import Data.Time (getCurrentTime)
-import Data.String (fromString)
 import System.IO (BufferMode(NoBuffering), hSetBuffering, stdout)
 
 import Types (AppState(..), Status(..))
@@ -31,9 +32,9 @@ inputLoop state = do
             state
             (\s ->
                  AppState $
-                 Status (fromString l) now (fromString content) : status s)
+                 Status l now content : status s)
 
-prompt :: String -> IO String
+prompt :: Text -> IO Text
 prompt p = do
-    putStr $ p <> ": "
-    getLine
+    TIO.putStr $ p <> ": "
+    TIO.getLine
