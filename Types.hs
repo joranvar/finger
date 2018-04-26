@@ -13,7 +13,7 @@ import GHC.Generics (Generic)
 data Status = Status
     { label :: Text
     , since :: UTCTime
-    , contents :: Text
+    , contents :: Maybe Text
     } deriving (Generic)
 instance ToJSON Status
 

@@ -32,9 +32,15 @@ inputLoop state = do
             state
             (\s ->
                  AppState $
-                 Status l now content : status s)
+                 Status l now (nonEmpty content) : status s)
 
 prompt :: Text -> IO Text
 prompt p = do
     TIO.putStr $ p <> ": "
     TIO.getLine
+
+nonEmpty :: Text -> Maybe Text
+nonEmpty t =
+    if t == ""
+        then Nothing
+        else Just t
