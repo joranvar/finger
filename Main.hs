@@ -4,7 +4,7 @@ module Main
     ) where
 
 import Control.Concurrent (forkIO)
-import Control.Concurrent.STM (atomically, modifyTVar', newTVarIO)
+import Control.Concurrent.STM (TVar, atomically, modifyTVar', newTVarIO)
 import Control.Monad (forever)
 import Data.Monoid ((<>))
 import Data.Time (getCurrentTime)
@@ -19,15 +19,18 @@ main = do
     hSetBuffering stdout NoBuffering
     state <- newTVarIO $ AppState []
     _ <- forkIO $ startFingerServer state
-    forever $ do
-        putStr "Set a new label: "
-        l <- getLine
-        putStr $ "Set a new " <> l <> ": "
-        content <- getLine
-        now <- getCurrentTime
-        atomically $
-            modifyTVar'
-                state
-                (\s ->
-                     AppState $
-                     Status (fromString l) now (fromString content) : status s)
+    forever $ inputLoop state
+
+inputLoop :: TVar AppState -> IO ()
+inputLoop state = do
+    putStr "Set a new label: "
+    l <- getLine
+    putStr $ "Set a new " <> l <> ": "
+    content <- getLine
+    now <- getCurrentTime
+    atomically $
+        modifyTVar'
+            state
+            (\s ->
+                 AppState $
+                 Status (fromString l) now (fromString content) : status s)
