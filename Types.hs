@@ -6,7 +6,7 @@ module Types
     ) where
 
 import Data.Aeson (ToJSON)
-import Data.Text.Lazy (Text)
+import Data.Text (Text)
 import Data.Time (UTCTime)
 import GHC.Generics (Generic)
 
