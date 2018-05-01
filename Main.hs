@@ -69,7 +69,7 @@ main = do
                 , appHandleEvent = handleAppEvent
                 , appAttrMap = const (attrMap V.defAttr [])
                 } $
-        UIState state (E.editor 1 (Just 1) "") (E.editor 2 (Just 1) "") 1 []
+        UIState state (E.editor 1 (Just 1) "") (E.editor 2 Nothing "") 1 []
     pure ()
 
 drawApp :: UIState -> [Widget Int]
@@ -106,7 +106,7 @@ handleAppEvent ui (VtyEvent (V.EvKey key []))
         continue $ ui {_focusedEditor = 1}
     | key == V.KEnter = do
         statuses' <- liftIO $ inputLoop (_s ui) (T.unlines $ E.getEditContents $ _labelEditor ui) (T.unlines $ E.getEditContents $ _contentEditor ui)
-        continue $ UIState (_s ui) (E.editor 1 (Just 1) "") (E.editor 2 (Just 1) "") 1 statuses'
+        continue $ UIState (_s ui) (E.editor 1 (Just 1) "") (E.editor 2 Nothing "") 1 statuses'
 handleAppEvent ui (VtyEvent e)
     | _focusedEditor ui == 1 =
         continue =<< handleEventLensed ui labelEditor E.handleEditorEvent e
