@@ -105,7 +105,7 @@ handleAppEvent ui (VtyEvent (V.EvKey key []))
     | key == V.KBackTab && _focusedEditor ui == 2 =
         continue $ ui {_focusedEditor = 1}
     | key == V.KEnter = do
-        statuses' <- liftIO $ inputLoop (_s ui) (T.unlines $ E.getEditContents $ _labelEditor ui) (T.unlines $ E.getEditContents $ _contentEditor ui)
+        statuses' <- liftIO $ inputLoop (_s ui) (mconcat $ E.getEditContents $ _labelEditor ui) (T.unlines $ E.getEditContents $ _contentEditor ui)
         continue $ UIState (_s ui) (E.editor 1 (Just 1) "") (E.editor 2 Nothing "") 1 statuses'
 handleAppEvent ui (VtyEvent e)
     | _focusedEditor ui == 1 =
