@@ -40,7 +40,7 @@ import Data.Text (Text)
 import qualified Data.Text as T (unpack, unlines)
 import Data.Time (getCurrentTime)
 import qualified Data.Vector as V (fromList)
-import qualified Graphics.Vty as V (Event(EvKey), Key(..), defAttr)
+import qualified Graphics.Vty as V (Event(EvKey), Key(..), Modifier(..), defAttr)
 import System.IO (BufferMode(NoBuffering), hSetBuffering, stdout)
 
 import Types (AppState(..), Status(..))
@@ -95,7 +95,7 @@ drawApp ui =
     ]
 
 handleAppEvent :: UIState -> BrickEvent Int e -> EventM Int (Next UIState)
-handleAppEvent ui (VtyEvent (V.EvKey key []))
+handleAppEvent ui (VtyEvent (V.EvKey key mods))
     | key == V.KChar '\t' && _focusedEditor ui == 1 =
         continue $ ui {_focusedEditor = 2}
     | key == V.KChar '\t' && _focusedEditor ui == 2 =
@@ -104,7 +104,7 @@ handleAppEvent ui (VtyEvent (V.EvKey key []))
         continue $ ui {_focusedEditor = 2}
     | key == V.KBackTab && _focusedEditor ui == 2 =
         continue $ ui {_focusedEditor = 1}
-    | key == V.KEnter = do
+    | key == V.KEnter && V.MMeta `elem` mods = do
         statuses' <- liftIO $ inputLoop (_s ui) (mconcat $ E.getEditContents $ _labelEditor ui) (T.unlines $ E.getEditContents $ _contentEditor ui)
         continue $ UIState (_s ui) (E.editor 1 (Just 1) "") (E.editor 2 Nothing "") 1 statuses'
 handleAppEvent ui (VtyEvent e)
